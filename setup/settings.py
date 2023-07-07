@@ -26,10 +26,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'jornada'
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -115,3 +117,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #Media // Para adicionar fotos por meio do gerenciador de arquivos
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+#Configuração do CORS. Revisar antes de ir para ambiente de produção
+CORS_ALLOW_ALL_ORIGINS: True
