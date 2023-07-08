@@ -7,7 +7,7 @@ class Depoimento(models.Model):
     
     nome = models.CharField(max_length=20, blank=False, null=False)
     depoimento = models.TextField(blank=False, null=False)
-    foto = models.ImageField(blank=False, upload_to=upload_path)
+    foto = models.ImageField(blank=True, upload_to=upload_path)
 
     def __str__(self) -> str:
         return f'Depoimento de {self.nome}'
