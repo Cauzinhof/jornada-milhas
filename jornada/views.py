@@ -1,7 +1,9 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 from .models import Depoimento, Destino
 from .serializer import DepoimentoSerializer, DestinoSerializer
 import random
+from rest_framework.exceptions import NotFound
+
 
 class DepoimentosViewSet(viewsets.ModelViewSet):
     """Listando todos os depoimentos"""
@@ -25,5 +27,31 @@ class DepoimentosHomeViewSet(viewsets.ModelViewSet):
 
 class DestinosViewSet(viewsets.ModelViewSet):
     """Listando todos os destinos"""
-    queryset = Destino.objects.all()
     serializer_class = DestinoSerializer
+
+    def get_queryset(self):
+        """
+        Adiciona a possibilidade de filtrar o destino pelo nome
+        a partir da url ?nome="pesquisa".
+        Caso não seja passado argumento, todos os destinos 
+        serão exibidos
+        """
+        queryset = Destino.objects.all()
+        cidade = self.request.query_params.get('nome')
+        if cidade is not None:
+            queryset = queryset.filter(nome=cidade.title())
+        return queryset
+    
+    def list(self, request, *args, **kwargs):
+        """
+        Redefinição da função list única e exclusivamente
+        para retornar a a mensagem personalidada e o 
+        código 404.
+        """
+        queryset = self.get_queryset()
+        response = super().list(request, *args, **kwargs)
+
+        if not queryset.exists():
+            raise NotFound("Nenhum destino foi encontrado.")
+
+        return response
