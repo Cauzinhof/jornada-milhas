@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .models import Depoimento
-from .serializer import DepoimentoSerializer
+from .models import Depoimento, Destino
+from .serializer import DepoimentoSerializer, DestinoSerializer
 import random
 
 class DepoimentosViewSet(viewsets.ModelViewSet):
@@ -21,3 +21,9 @@ class DepoimentosHomeViewSet(viewsets.ModelViewSet):
         #Escolha aleatória de 3 elementos. Necessário transformar em lista primeiro.
         queryset = random.sample(list(depoimentos), k=3)
         return queryset
+    
+
+class DestinosViewSet(viewsets.ModelViewSet):
+    """Listando todos os destinos"""
+    queryset = Destino.objects.all()
+    serializer_class = DestinoSerializer
