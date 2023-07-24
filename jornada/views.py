@@ -1,8 +1,8 @@
-from rest_framework import viewsets, filters
+from rest_framework import viewsets, status
 from .models import Depoimento, Destino
 from .serializer import DepoimentoSerializer, DestinoSerializer
 import random
-from rest_framework.exceptions import NotFound
+from rest_framework.response import Response
 
 
 class DepoimentosViewSet(viewsets.ModelViewSet):
@@ -32,7 +32,7 @@ class DestinosViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """
         Adiciona a possibilidade de filtrar o destino pelo nome
-        a partir da url ?nome="pesquisa".
+        a partir da url ?nome=<cidade>.
         Caso não seja passado argumento, todos os destinos 
         serão exibidos
         """
@@ -45,13 +45,13 @@ class DestinosViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         """
         Redefinição da função list única e exclusivamente
-        para retornar a a mensagem personalidada e o 
+        para retornar a mensagem personalidada e o 
         código 404.
         """
         queryset = self.get_queryset()
-        response = super().list(request, *args, **kwargs)
+        serializer = self.get_serializer(queryset, many=True)
 
         if not queryset.exists():
-            raise NotFound("Nenhum destino foi encontrado.")
-
-        return response
+            return Response({"mensagem":"Nenhum destino foi encontrado."}, status=status.HTTP_404_NOT_FOUND)
+        
+        return Response(serializer.data)
