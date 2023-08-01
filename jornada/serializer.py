@@ -11,4 +11,4 @@ class DestinoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Destino
-        fields = '__all__'
+        fields = ['foto_1', 'foto_2', 'nome', 'meta', 'texto_descritivo']

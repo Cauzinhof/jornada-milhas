@@ -19,7 +19,11 @@ class Destino(models.Model):
     
     nome = models.CharField(max_length=30, blank=False, null=False)
     preco = models.CharField(max_length=20, blank=False, null=False)
-    foto = models.ImageField(blank=True, upload_to=upload_path)
+    foto_1 = models.ImageField(blank=True, upload_to=upload_path)
+    foto_2 = models.ImageField(blank=True, upload_to=upload_path)
+    meta = models.CharField(max_length=160, blank=False, default="")
+    texto_descritivo = models.TextField(blank=True)
+
 
     def __str__(self) -> str:
         return self.nome
